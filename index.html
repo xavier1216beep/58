@@ -378,6 +378,27 @@
       .letter-inner{ padding:0 28px; }
       .quote-wrap{ padding:0 24px; }
     }
+
+    /* ── FIT FIXES ── */
+    .photo-panel .photo-frame { background:#0b0b0b; }
+    .photo-panel .photo-frame img.main {
+      position: relative; z-index: 1;
+      object-fit: contain; transform: scale(1.03);
+    }
+    .photo-panel.in-view .photo-frame img.main { transform: scale(1); }
+    .photo-panel .photo-frame img.bg-blur {
+      position: absolute; inset: -40px; width: calc(100% + 80px); height: calc(100% + 80px);
+      object-fit: cover; transform: none; filter: blur(34px) brightness(.45); z-index: 0;
+    }
+    .photo-overlay { z-index: 2; }
+    .photo-caption, .photo-num { z-index: 3; }
+    .letter-inner { max-width: min(1000px, 92vw); padding: 0 32px; max-height: 100vh; }
+    .letter-pre { margin-bottom: 1.6vh; }
+    .letter-heading { font-size: clamp(26px, 6vh, 52px); margin-bottom: 2.4vh; }
+    .letter-body p { font-size: clamp(12px, 2.1vh, 17px); line-height: 1.65; margin-bottom: 1.6vh; break-inside: avoid; }
+    .letter-rule { margin: 2vh 0; }
+    @media (min-width: 800px) { .letter-body { column-count: 2; column-gap: 40px; } }
+    @media (max-width: 799px) { .letter-body p { font-size: clamp(11px, 1.8vh, 15px); line-height: 1.55; } }
   </style>
 </head>
 <body>
@@ -601,6 +622,14 @@
     });
     e.target.value = '';
   }
+
+
+  /* ── PHOTO FIT: blurred backdrop so nothing is cropped ── */
+  document.querySelectorAll('.photo-panel .photo-frame img').forEach(img => {
+    img.classList.add('main');
+    const bg = img.cloneNode(); bg.className = 'bg-blur'; bg.alt = '';
+    img.parentElement.insertBefore(bg, img);
+  });
 
   /* ── FILM HOLES ── */
   // already rendered in HTML
